@@ -19,11 +19,19 @@ public class Ex1 {
          * @return
          */
         public static int number2Int(String num) {
-            if (isNumber(num)==true)
-            continue
-                    else
             int ans = -1;
-            //check what us the bace
+            if (isNumber(num)==true){
+               String [] part = num.split("b");
+
+               ans = Integer.parseInt(part[0], part[1]);
+
+
+
+
+              //  String basePart = num.substring( num.indexOf('b'),num.indexOf('b') + 1);
+
+
+            }
 
 
             return ans;
