@@ -60,8 +60,8 @@ public class Ex1 {
             return false; // 'b' not present, at the start, or at the end
         }
         String numberPart = a.substring(0, bIndex); // The part before 'b'
-        String basePart = a.substring(bIndex + 1); // The part after 'b'
-        System.out.println(basePart);
+        String basePart = a.substring(bIndex + 1);
+
         //  Validate the numberPart is true
         //  Validate the basePart is true
 
@@ -72,8 +72,6 @@ public class Ex1 {
 
                 base = baseChar - '0'; // Numeric base 2-9    //the result in int
             } else if (baseChar >= 'A' && baseChar <= 'G') {
-
-
                 base = 10 + (baseChar - 'A'); // Letter base 10-16
             } else {
                 return false; // Invalid base
@@ -230,61 +228,60 @@ public class Ex1 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int value1 = 0;
-        int value2 = 0;
-        String[] numbersArray = new String[4]; // To hold the 4 numbers: 2 inputs + sum + multiplication results
+        int value1 = 0, value2 = 0;
+        String[] numbersArray = new String[4]; // Holds inputs and calculated results
 
         // First input
-        System.out.println("Enter a string as number#1 :");
+        System.out.println("Enter a string as number#1 (or \"quit\" to end the program):");
         String input1 = scanner.nextLine();
-        if (isNumber(input1)) {
-            numbersArray[0] = input1;
-            value1 = number2Int(input1);
-            System.out.println("num1= " + input1 + " is number: true , value: " + value1);
-        } else {
-            System.out.println("ERR: num1 is in the wrong format! ");
+        if (!isNumber(input1)) {
+            System.out.println("ERR: num1 is in the wrong format!");
             return;
         }
+        value1 = number2Int(input1);
+        numbersArray[0] = input1;
+        System.out.println("num1 = " + input1 + " is number: true, value: " + value1);
 
         // Second input
-        System.out.println("Enter a string as number#2 :");
+        System.out.println("Enter a string as number#2 (or \"quit\" to end the program):");
         String input2 = scanner.nextLine();
-        if (isNumber(input2)) {
-            numbersArray[1] = input2;
-            value2 = number2Int(input2);
-            System.out.println("num2= " + input2 + " is number: true , value: " + value2);
-        } else {
+        if (!isNumber(input2)) {
             System.out.println("ERR: num2 is in the wrong format!");
             return;
         }
+        value2 = number2Int(input2);
+        numbersArray[1] = input2;
+        System.out.println("num2 = " + input2 + " is number: true, value: " + value2);
 
         // Base input
         System.out.println("Enter a base for output (a number [2,16]):");
         int base = scanner.nextInt();
         if (base < 2 || base > 16) {
-            System.out.println("Base must be between 2 and 16. Exiting program.");
-            return;  // Exit if the base is not valid
+            System.out.println("ERR: Base must be between 2 and 16. Exiting program.");
+            return;
         }
 
         // Calculate sum and product
         int sum = value1 + value2;
         int product = value1 * value2;
 
-        // Convert to the desired base
         String sumInBase = int2Number(sum, base);
         String productInBase = int2Number(product, base);
 
-        // Store the results in the array
+        // Store results in the array
         numbersArray[2] = sumInBase;
         numbersArray[3] = productInBase;
 
-        // Find the maximum number and print the result
+        // Find the maximum value index
         int index = maxIndex(numbersArray);
+
+        // Display results
         System.out.println(input1 + " + " + input2 + " = " + sumInBase);
         System.out.println(input1 + " * " + input2 + " = " + productInBase);
-        System.out.println("Max number over [" + numbersArray[0] + "," + numbersArray[1] + "," + numbersArray[2] + "," + numbersArray[3] + "] is: " + numbersArray[index]);
+        System.out.println("Max number over [" + String.join(", ", numbersArray) + "] is: " + numbersArray[index]);
     }
 }
+
 
 
 
