@@ -23,24 +23,31 @@ public class Ex1 {
      * @return
      */
     public static int number2Int(String num) {
-        int ans = -1;
-        if (isNumber(num)) {
-            String[] arr = num.split("b");
-            String numberPart = arr[0];
-            String basePart = arr[1];
-            int base;
-            char baseChar = basePart.charAt(0);
-
-            if (baseChar >= '2' && baseChar <= '9') {
-                base = baseChar - '0';  // Numeric base 2-9
-            } else {
-                base = 10 + (baseChar - 'A'); // Letter base 10-16
-            }
-
-            ans = Integer.parseInt(numberPart, base);
+        if (!isNumber(num)) {
+            return -1; // Invalid number format
         }
-          return ans;
+        String[] parts = num.split("b");
+        String numberPart = parts[0];
+        String basePart = parts[1];
+
+        // Determine base
+        int base;
+        char baseChar = basePart.charAt(0);
+        if (baseChar >= '2' && baseChar <= '9') {
+            base = baseChar - '0';
+        } else {
+            base = 10 + (baseChar - 'A');
+        }
+
+        int ans = 0;
+        for (int i = 0; i < numberPart.length(); i++) {
+            char c = numberPart.charAt(i);
+            int digit = (c >= '0' && c <= '9') ? c - '0' : 10 + (c - 'A');
+            ans = ans * base + digit;
+        }
+        return ans;
     }
+
 
     /**
      * This static function checks if the given String (g) is in a valid "number" format.
@@ -49,54 +56,49 @@ public class Ex1 {
      * @return true iff the given String is in a number format
      */
     public static boolean isNumber(String a) {
-        //  Check if the string is null or empty
         if (a == null || a.isEmpty()) {
             return false;
         }
-        //  Ensure the input contains 'b' and split into number and base parts
         int bIndex = a.indexOf('b');
         if (bIndex == -1 || bIndex == 0 || bIndex == a.length() - 1) {
             return false; // 'b' not present, at the start, or at the end
         }
-        String numberPart = a.substring(0, bIndex); // The part before 'b'
+        String numberPart = a.substring(0, bIndex);
         String basePart = a.substring(bIndex + 1);
 
-        //  Validate the numberPart is true
-        //  Validate the basePart is true
-
+        // Validate base
         int base = 0;
         if (basePart.length() == 1) {
             char baseChar = basePart.charAt(0);
             if (baseChar >= '2' && baseChar <= '9') {
-
-                base = baseChar - '0'; // Numeric base 2-9    //the result in int
-            } else if (baseChar >= 'A' && baseChar <= 'G') {
-                base = 10 + (baseChar - 'A'); // Letter base 10-16
+                base = baseChar - '0'; // Bases 2-9
+            } else if (baseChar >= 'A' && baseChar <= 'F') {
+                base = 10 + (baseChar - 'A'); // Bases 10-16
             } else {
                 return false; // Invalid base
             }
         } else {
-            return false;   // Base part must be a single character
+            return false; // Base part must be a single character
         }
 
-        //  Validate the number part (digits must match the base)
-
+        // Validate number part
         for (int i = 0; i < numberPart.length(); i++) {
             char c = numberPart.charAt(i);
             int num;
-            if (c >= '2' && c <= '9') {
-                num = c - '0'; // Numeric base 2-9    //the result in int
-            } else if (c >= 'A' && c <= 'G') {
-                num = 10 + (c - 'A'); // Letter base 10-16
+            if (c >= '0' && c <= '9') {
+                num = c - '0'; // Numeric value
+            } else if (c >= 'A' && c <= 'F') {
+                num = 10 + (c - 'A'); // Alphabetic value
             } else {
-                return false; // Invalid base
+                return false; // Invalid character
             }
             if (num >= base) {
-                return false;
+                return false; // Digit out of base range
             }
         }
         return true;
     }
+
 
     /**
      * Calculate the number representation (in basis base)
