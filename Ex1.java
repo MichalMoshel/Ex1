@@ -1,6 +1,5 @@
 package assignments.ex1;
 
-import java.util.Scanner;
 
 /**
  * This class represents a simple solution for Ex1.
@@ -40,7 +39,7 @@ public class Ex1 {
 
             ans = Integer.parseInt(numberPart, base);
         }
-        return ans;
+          return ans;
     }
 
     /**
@@ -95,7 +94,6 @@ public class Ex1 {
             if (num >= base) {
                 return false;
             }
-
         }
         return true;
     }
@@ -222,65 +220,10 @@ public class Ex1 {
         // Return an array containing the number and the base
         return new int[]{number, base};
     }
-
-
-//////////////////////////
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int value1 = 0, value2 = 0;
-        String[] numbersArray = new String[4]; // Holds inputs and calculated results
-
-        // First input
-        System.out.println("Enter a string as number#1 (or \"quit\" to end the program):");
-        String input1 = scanner.nextLine();
-        if (!isNumber(input1)) {
-            System.out.println("ERR: num1 is in the wrong format!");
-            return;
-        }
-        value1 = number2Int(input1);
-        numbersArray[0] = input1;
-        System.out.println("num1 = " + input1 + " is number: true, value: " + value1);
-
-        // Second input
-        System.out.println("Enter a string as number#2 (or \"quit\" to end the program):");
-        String input2 = scanner.nextLine();
-        if (!isNumber(input2)) {
-            System.out.println("ERR: num2 is in the wrong format!");
-            return;
-        }
-        value2 = number2Int(input2);
-        numbersArray[1] = input2;
-        System.out.println("num2 = " + input2 + " is number: true, value: " + value2);
-
-        // Base input
-        System.out.println("Enter a base for output (a number [2,16]):");
-        int base = scanner.nextInt();
-        if (base < 2 || base > 16) {
-            System.out.println("ERR: Base must be between 2 and 16. Exiting program.");
-            return;
-        }
-
-        // Calculate sum and product
-        int sum = value1 + value2;
-        int product = value1 * value2;
-
-        String sumInBase = int2Number(sum, base);
-        String productInBase = int2Number(product, base);
-
-        // Store results in the array
-        numbersArray[2] = sumInBase;
-        numbersArray[3] = productInBase;
-
-        // Find the maximum value index
-        int index = maxIndex(numbersArray);
-
-        // Display results
-        System.out.println(input1 + " + " + input2 + " = " + sumInBase);
-        System.out.println(input1 + " * " + input2 + " = " + productInBase);
-        System.out.println("Max number over [" + String.join(", ", numbersArray) + "] is: " + numbersArray[index]);
-    }
 }
+
+
+
 
 
 
