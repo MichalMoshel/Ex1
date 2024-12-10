@@ -41,10 +41,7 @@ public class Ex1Test {
         }
         @Test
        void maxIndexTest() {
-            String [] s={"123b5",}
 
-       }
-@Test
-    void equals
-        // Add additional test functions - test as much as you can.
-  }
+
+            // Add additional test functions - test as much as you can.
+        }}

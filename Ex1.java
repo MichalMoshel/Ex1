@@ -1,31 +1,26 @@
 package assignments.ex1;
 
-
 /**
  * This class represents a simple solution for Ex1.
- * As defined here: https://docs.google.com/document/d/1AJ9wtnL1qdEs4DAKqBlO1bXCM6r6GJ_J/r/edit/edit
- * In this assignment, we will design a number formatting converter and calculator.
- * In general, we will use Strings as numbers over basis of binary till Hexa.
- * [2-16], 10-16 are represented by A,B,..G.
- * The general representation of the numbers is as a String with the following format:
- * <number><b><base> e.g., “135bA” (i.e., “135”, as 10 is the default base), “100111b2”, “12345b6”,”012b5”, “123bG”, “EFbG”.
- * The following are NOT in the format (not a valid number):
- * “b2”, “0b1”, “123b”, “1234b11”, “3b3”, “-3b5”, “3 b4”, “GbG”, "", null,
- * You should implement the following static functions:
+ * This solution involves number formatting converters and calculators.
+ * The number format is based on a string representation with a "b" for the base.
+ * Valid bases are between 2 and 16, with values for 10-16 represented by A-G.
  */
 public class Ex1 {
 
     /**
      * Convert the given number (num) to a decimal representation (as int).
-     * It the given number is not in a valid format returns -1.
+     * Returns -1 if the number is in an invalid format.
      *
      * @param num a String representing a number in basis [2,16]
-     * @return
+     * @return the decimal value of the number or -1 if invalid
      */
     public static int number2Int(String num) {
         if (!isNumber(num)) {
             return -1; // Invalid number format
         }
+
+        // Split into the number part and base part
         String[] parts = num.split("b");
         String numberPart = parts[0];
         String basePart = parts[1];
@@ -39,6 +34,7 @@ public class Ex1 {
             base = 10 + (baseChar - 'A');
         }
 
+        // Convert the number part into an integer based on the base
         int ans = 0;
         for (int i = 0; i < numberPart.length(); i++) {
             char c = numberPart.charAt(i);
@@ -48,138 +44,143 @@ public class Ex1 {
         return ans;
     }
 
-
     /**
-     * This static function checks if the given String (g) is in a valid "number" format.
+     * Check if the given string is in a valid number format.
      *
      * @param a a String representing a number
-     * @return true iff the given String is in a number format
+     * @return true if the string is in a valid number format, false otherwise
      */
     public static boolean isNumber(String a) {
         if (a == null || a.isEmpty()) {
             return false;
         }
+
+        // Trim whitespaces from both ends
+        a = a.trim();
+
+        // If there is no 'b', check if it's a decimal number
         int bIndex = a.indexOf('b');
-        if (bIndex == -1 || bIndex == 0 || bIndex == a.length() - 1) {
-            return false; // 'b' not present, at the start, or at the end
+        if (bIndex == -1) {
+            // No 'b', check if the string contains only digits
+            for (int i = 0; i < a.length(); i++) {
+                char c = a.charAt(i);
+                if (c < '0' || c > '9') {
+                    return false;
+                }
+            }
+            return true;  // All characters are digits
         }
+
+        // If 'b' is in an incorrect position (start or end) or appears more than once
+        if (bIndex == 0 || bIndex == a.length() - 1 || a.indexOf('b', bIndex + 1) != -1) {
+            return false;
+        }
+
+        // Split the string into the number part and the base part
         String numberPart = a.substring(0, bIndex);
         String basePart = a.substring(bIndex + 1);
 
-        // Validate base
-        int base = 0;
-        if (basePart.length() == 1) {
-            char baseChar = basePart.charAt(0);
-            if (baseChar >= '2' && baseChar <= '9') {
-                base = baseChar - '0'; // Bases 2-9
-            } else if (baseChar >= 'A' && baseChar <= 'F') {
-                base = 10 + (baseChar - 'A'); // Bases 10-16
-            } else {
-                return false; // Invalid base
-            }
-        } else {
-            return false; // Base part must be a single character
+        // The base part must contain exactly one character
+        if (basePart.length() != 1) {
+            return false;
         }
 
-        // Validate number part
+        int base;
+        char baseChar = basePart.charAt(0);
+
+        // If the base is between 2 and 9
+        if (baseChar >= '2' && baseChar <= '9') {
+            base = baseChar - '0'; // Convert the character to an integer base
+        }
+        // If the base is between A and F
+        else if (baseChar >= 'A' && baseChar <= 'F') {
+            base = 10 + (baseChar - 'A'); // Convert letters A-F to bases 10-15
+        } else {
+            return false;  // Invalid base
+        }
+
+        // Check if each character in the number part is valid for the base
         for (int i = 0; i < numberPart.length(); i++) {
             char c = numberPart.charAt(i);
-            int num;
+            int num = 0;
+
+            // Check if the character is a valid digit or letter for the base
             if (c >= '0' && c <= '9') {
-                num = c - '0'; // Numeric value
+                num = c - '0';  // Convert digits 0-9
             } else if (c >= 'A' && c <= 'F') {
-                num = 10 + (c - 'A'); // Alphabetic value
-            } else {
-                return false; // Invalid character
+                num = c - 'A' + 10;  // Convert letters A-F to 10-15
             }
+
+            // If the number is greater than or equal to the base, it's invalid
             if (num >= base) {
-                return false; // Digit out of base range
+                return false;
             }
         }
-        return true;
+
+        // Disallow leading zeros in the number part (e.g., "01b2")
+        if (numberPart.length() > 1 && numberPart.charAt(0) == '0') {
+            return false;
+        }
+
+        return true;  // Valid number format
     }
 
 
+
+
     /**
-     * Calculate the number representation (in basis base)
-     * of the given natural number (represented as an integer).
-     * If num<0 or base is not in [2,16] the function should return "" (the empty String).
+     * Convert the given natural number (num) into a string representation in the specified base.
      *
-     * @param num  the natural number (include 0).
-     * @param base the basis [2,16]
-     * @return a String representing a number (in base) equals to num, or an empty String (in case of wrong input).
+     * @param num  the natural number
+     * @param base the base (between 2 and 16)
+     * @return a string representing the number in the given base
      */
-
     public static String int2Number(int num, int base) {
-        // Initialize the result string
-        String ans = "";
-
-        // Validate input
         if (num < 0 || base < 2 || base > 16) {
-            return ans; // Return empty string for invalid input
+            return ""; // Return empty string for invalid input
         }
 
-        // Handle the zero case
+        // Handle zero case
         if (num == 0) {
-            return "0b" + base; // Representation of 0 in any base
+            return "0b" + base;
         }
 
-        // Conversion logic
+        // Convert number to string in given base
         String numPart = "";
-        int currentNum = num;
-
-        while (currentNum > 0) {
-            int divisionRemainder = currentNum % base;
-
-            // For bases greater than 10, convert remainder to appropriate character
-            if (divisionRemainder >= 10) {
-                numPart = (char) ('A' + (divisionRemainder - 10)) + numPart;
+        while (num > 0) {
+            int remainder = num % base;
+            if (remainder >= 10) {
+                numPart = (char) ('A' + (remainder - 10)) + numPart;
             } else {
-                numPart = divisionRemainder + numPart;
+                numPart = remainder + numPart;
             }
-
-            currentNum = currentNum / base; // Update the number
+            num /= base;
         }
 
-        // Determine base representation
-        String basePart = "";
-        if (base >= 2 && base <= 9) {
-            basePart = String.valueOf(base); // Convert base to string
-        } else if (base >= 10 && base <= 16) {
-            basePart = "" + (char) ('A' + (base - 10)); // Convert base to corresponding letter
-        }
-
-        // Combine the number and base parts
-        ans = numPart + "b" + basePart;
-
-        return ans;
+        // Return the final formatted string
+        return numPart + "b" + (base < 10 ? base : (char) ('A' + (base - 10)));
     }
 
     /**
-     * Checks if the two numbers have the same value.
+     * Check if the two numbers are equal.
      *
      * @param n1 first number
      * @param n2 second number
-     * @return true iff the two numbers have the same values.
+     * @return true if the two numbers are equal
      */
     public static boolean equals(String n1, String n2) {
         if (n1 == null || n2 == null) {
             return false;
         }
 
-        // Validate and convert n1 and n2 using number2Int (or similar)
-        int num1 = number2Int(n1);
-        int num2 = number2Int(n2);
-
-        return num1 == num2;
+        return number2Int(n1) == number2Int(n2);
     }
+
     /**
-     * This static function search for the array index with the largest number (in value).
-     * In case there are more than one maximum - returns the first index.
-     * Note: you can assume that the array is not null and is not empty, yet it may contain null or none-valid numbers (with value -1).
+     * Find the index of the largest number in the array (by value).
      *
      * @param arr an array of numbers
-     * @return the index in the array in with the largest number (in value).
+     * @return the index of the largest number
      */
     public static int maxIndex(String[] arr) {
         int max = -1;
@@ -196,40 +197,4 @@ public class Ex1 {
         }
         return maxIndex;
     }
-
-
-    /**
-     * This function extracts the number and base from the string in format <number><b><base>.
-     * Assumes the input format is correct and validated already.
-     *
-     * @param input the input string in the format <number><b><base>
-     * @return an array with two elements: the number and the base as integers.
-     */
-    public static int[] extractNumberAndBase(String input) {
-        // Find the position of the 'b' character
-        int bIndex = input.indexOf('b');
-
-        // Separate the number and base parts
-        String numberPart = input.substring(0, bIndex); // Extract number part before 'b'
-        String basePart = input.substring(bIndex + 1);  // Extract base part after 'b'
-
-        // Convert the number part to an integer
-        int number = Integer.parseInt(numberPart);
-
-        // Convert the base part to an integer
-        int base = Integer.parseInt(basePart);
-
-        // Return an array containing the number and the base
-        return new int[]{number, base};
-    }
 }
-
-
-
-
-
-
-
-
-
-
