@@ -36,7 +36,10 @@ public class Ex1Main {
                     System.out.println("ERR: num1 is in the wrong format!");
                     continue;  // Skip further steps and go back to the beginning of the loop
                 }
+            }else {
+                break;
             }
+
 
             // Prompt user to enter the second number (num2)
             System.out.println("Enter a string as number#2 (or \"quit\" to end the program):");
@@ -54,6 +57,8 @@ public class Ex1Main {
                     System.out.println("ERR: num2 is in the wrong format!");
                     continue;  // Skip further steps and go back to the beginning of the loop
                 }
+            }else {
+                break;
             }
 
             // Prompt user to enter a base for output (between 2 and 16)

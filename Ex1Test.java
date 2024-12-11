@@ -22,7 +22,7 @@ public class Ex1Test {
 
        @Test
         void isBasisNumberTest() {
-            String[] good = {"1", "1b2", "01b2", "123bA", "ABbG", "0bA"};
+           String[] good = {"1", "1b2", "01b2", "123bA", "ABbG", "0bA"};
             for(int i=0;i<good.length;i=i+1) {
                boolean ok = Ex1.isNumber(good[i]);
                 assertTrue(ok);
@@ -40,8 +40,19 @@ public class Ex1Test {
         assertEquals(a,b);
         }
         @Test
-       void maxIndexTest() {
+        void Number2intTest(){
+            int n = Ex1.number2Int("00050");
+            assertEquals(n, 50);
 
+            int w = Ex1.number2Int("123b5");
+            assertEquals(w,38);
+
+        }
+        @Test
+       void maxIndexTest() {
+        String[] s ={"10","40","50","60"};
+        int i = Ex1.maxIndex(s);
+assertEquals(i,3);
 
             // Add additional test functions - test as much as you can.
         }}

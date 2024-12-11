@@ -19,7 +19,9 @@ public class Ex1 {
         if (!isNumber(num)) {
             return -1; // Invalid number format
         }
-
+if(num.indexOf('b')==-1){
+    return Integer.parseInt(num);
+}
         // Split into the number part and base part
         String[] parts = num.split("b");
         String numberPart = parts[0];
@@ -56,7 +58,7 @@ public class Ex1 {
         }
 
         // Trim whitespaces from both ends
-        a = a.trim();
+       //f a = a.trim();
 
         // If there is no 'b', check if it's a decimal number
         int bIndex = a.indexOf('b');
@@ -92,8 +94,8 @@ public class Ex1 {
         if (baseChar >= '2' && baseChar <= '9') {
             base = baseChar - '0'; // Convert the character to an integer base
         }
-        // If the base is between A and F
-        else if (baseChar >= 'A' && baseChar <= 'F') {
+        // If the base is between A and G
+        else if (baseChar >= 'A' && baseChar <= 'G') {
             base = 10 + (baseChar - 'A'); // Convert letters A-F to bases 10-15
         } else {
             return false;  // Invalid base
@@ -107,19 +109,17 @@ public class Ex1 {
             // Check if the character is a valid digit or letter for the base
             if (c >= '0' && c <= '9') {
                 num = c - '0';  // Convert digits 0-9
-            } else if (c >= 'A' && c <= 'F') {
-                num = c - 'A' + 10;  // Convert letters A-F to 10-15
+            } else if (c >= 'A' && c <= 'G') {
+                num = c - 'A' + 10;  // Convert letters A-G to 10-15
+            }else{
+                return false;
             }
+
 
             // If the number is greater than or equal to the base, it's invalid
             if (num >= base) {
                 return false;
             }
-        }
-
-        // Disallow leading zeros in the number part (e.g., "01b2")
-        if (numberPart.length() > 1 && numberPart.charAt(0) == '0') {
-            return false;
         }
 
         return true;  // Valid number format
