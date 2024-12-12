@@ -120,6 +120,8 @@ public class Ex1Test {
         // Case 1: Equal values in different representations.
         assertTrue(Ex1.equals("1010b2", "10bA")); // Binary and decimal representations.
 
+        assertTrue(Ex1.equals("A0bG", "160"));
+
         // Case 2: Different values.
         assertFalse(Ex1.equals("1010b2", "11bA")); // Binary and decimal mismatch.
 

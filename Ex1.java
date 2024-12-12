@@ -110,13 +110,18 @@ public class Ex1 {
      * @param base the base (between 2 and 16)
      * @return a string representing the number in the given base
      */
-
     public static String int2Number(int num, int base) {
         if (num < 0 || base < 2 || base > 16) { // Validate inputs.
             return ""; // Return empty string for invalid input.
         }
-        if (num == 0) { // Special case: zero.
-            return "0b" + base;
+
+        // Special case: zero.
+        if (num == 0) {
+            if (base == 10) {
+                return "0"; // For decimal base, return only "0".
+            } else {
+                return "0b" + base; // For other bases, return "0b<base>".
+            }
         }
 
         String numPart = ""; // String to accumulate the converted number.
@@ -130,12 +135,18 @@ public class Ex1 {
             num /= base; // Reduce the number.
         }
 
+        // For decimal base, return the number part without the base indicator.
+        if (base == 10) {
+            return numPart;
+        }
+
         // Convert base 16 to 'G', base 15 to 'F', etc.
         char baseChar = (base == 16) ? 'G' : (base == 15) ? 'F' : (base == 14) ? 'E' : (base == 13) ? 'D' :
                 (base == 12) ? 'C' : (base == 11) ? 'B' : (char) ('0' + base); // Handle special cases.
 
         return numPart + "b" + baseChar; // Format result with 'b' before base character.
     }
+
 
 
     /**
